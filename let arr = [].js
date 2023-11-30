@@ -1,66 +1,49 @@
-import java.util.Arrays;
-import java.util.Random;
-import java.util.Scanner;
+import com.github.javafaker.Faker;
 
-public class BinarySearchExample {
+public class BubbleSortNames {
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.print("Введіть довжину масиву: ");
-        int arrayLength = scanner.nextInt();
-
-        System.out.print("Введіть мінімальне значення діапазону: ");
-        int minValue = scanner.nextInt();
-
-        System.out.print("Введіть максимальне значення діапазону: ");
-        int maxValue = scanner.nextInt();
-
-        int[] array = generateRandomArray(arrayLength, minValue, maxValue);
-        Arrays.sort(array);
-
-        System.out.println("Відсортований масив: " + Arrays.toString(array));
-
-        System.out.print("Введіть число для пошуку: ");
-        int target = scanner.nextInt();
-
-        int resultIndex = binarySearch(array, target);
-        if (resultIndex != -1) {
-            System.out.println("Число " + target + " знайдено на позиції " + resultIndex);
-        } else {
-            System.out.println("Число " + target + " не знайдено в масиві.");
-        }
-
-        scanner.close();
+        int numberOfNames = 10;
+        Faker faker = new Faker();
+        String[] names = generateRandomNames(numberOfNames, faker);
+        System.out.println("Початковий масив імен:");
+        printArray(names);
+        bubbleSort(names);
+        System.out.println("\nВідсортований масив імен:");
+        printArray(names);
     }
 
-    private static int[] generateRandomArray(int length, int minValue, int maxValue) {
-        int[] array = new int[length];
-        Random random = new Random();
-
-        for (int i = 0; i < length; i++) {
-            array[i] = random.nextInt(maxValue - minValue + 1) + minValue;
+    private static String[] generateRandomNames(int numberOfNames, Faker faker) {
+        String[] names = new String[numberOfNames];
+        for (int i = 0; i < numberOfNames; i++) {
+            names[i] = faker.name().fullName();
         }
-
-        return array;
+        return names;
     }
 
-    private static int binarySearch(int[] array, int target) {
-        int left = 0;
-        int right = array.length - 1;
+    private static void bubbleSort(String[] array) {
+        int n = array.length;
+        boolean swapped;
 
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
+        do {
+            swapped = false;
 
-            if (array[mid] == target) {
-                return mid;
-            } else if (array[mid] < target) {
-                left = mid + 1;
-            } else {
-                right = mid - 1;
+            for (int i = 1; i < n; i++) {
+                if (array[i - 1].compareTo(array[i]) > 0) {
+                    String temp = array[i - 1];
+                    array[i - 1] = array[i];
+                    array[i] = temp;
+                    swapped = true;
+                }
             }
-        }
 
-        return -1;
+            n--;
+        } while (swapped);
+    }
+
+    private static void printArray(String[] array) {
+        for (String name : array) {
+            System.out.println(name);
+        }
     }
 }
